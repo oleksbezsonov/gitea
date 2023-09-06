@@ -1,0 +1,58 @@
+namespace: gitea
+gitea:
+  defines: runnable
+  metadata:
+    name: gitea
+    description: >-
+      Gitea is a community managed lightweight code hosting solution written in
+      Go behaving like a local GitHub
+    icon: https://emojiapi.dev/api/v1/robot.svg
+  containers:
+    gitea:
+      build: .
+  services:
+    ssh:
+      container: gitea
+      port: 22
+      host-port: 22
+      publish: false
+      protocol: TCP
+      description: SSH Port for git operations
+    webui:
+      container: gitea
+      port: 3000
+      host-port: 3000
+      publish: false
+      protocol: TCP
+      description: Port for Gitea web interface
+  variables:
+    goproxy:
+      env: GOPROXY
+      type: string
+      description: Proxy for Go modules
+      value: '!!!SETME!!!'
+    gitea-version:
+      env: GITEA_VERSION
+      type: string
+      description: The version of Gitea
+      value: '!!!SETME!!!'
+    tags:
+      env: TAGS
+      type: string
+      description: Golang build tags
+      value: '!!!SETME!!!'
+    cgo-extra-cflags:
+      env: CGO_EXTRA_CFLAGS
+      type: string
+      description: Extra C flags
+      value: '!!!SETME!!!'
+    user:
+      env: USER
+      type: string
+      description: Operating system user
+      value: git
+    gitea-custom:
+      env: GITEA_CUSTOM
+      type: string
+      description: Custom configuration path for Gitea
+      value: /data/gitea
