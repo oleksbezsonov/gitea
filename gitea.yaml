@@ -1,0 +1,36 @@
+namespace: gitea
+gitea:
+  defines: runnable
+  metadata:
+    name: gitea
+    description: Gitea is a self-hosted Git service written in Go
+    icon: https://emojiapi.dev/api/v1/robot.svg
+  containers:
+    gitea:
+      build: .
+  services:
+    ssh:
+      container: gitea
+      port: 22
+      host-port: 22
+      publish: false
+      protocol: TCP
+      description: Port for SSH connections
+    http:
+      container: gitea
+      port: 3000
+      host-port: 3000
+      publish: false
+      protocol: TCP
+      description: Port for HTTP connections
+  variables:
+    user:
+      env: USER
+      type: string
+      description: User running the service
+      value: git
+    gitea-custom:
+      env: GITEA_CUSTOM
+      type: string
+      description: Path to custom configuration
+      value: /data/gitea
