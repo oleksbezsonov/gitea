@@ -4,55 +4,70 @@ gitea:
   metadata:
     name: gitea
     description: >-
-      Gitea is a community managed lightweight code hosting solution written in
-      Go. It is published under the MIT license.
-    icon: https://avatars.githubusercontent.com/u/17816670?s=200&v=4
+      Gitea is a community managed lightweight code hosting solution that is
+      written in Go.
+    icon: https://gitea.io/en-us/
   containers:
     gitea:
       build: .
   services:
+    http:
+      container: gitea
+      port: 3000
+      host-port: 3000
+      publish: false
+      protocol: TCP
+      description: HTTP port for web access
     ssh:
       container: gitea
       port: 22
       host-port: 22
       publish: false
       protocol: TCP
-      description: SSH access to the server
-    web:
-      container: gitea
-      port: 3000
-      host-port: 3000
-      publish: false
-      protocol: TCP
-      description: Web access to the Gitea application
+      description: SSH port for git access
   variables:
     goproxy:
       env: GOPROXY
       type: string
-      description: To specify the proxy used for go get command
+      description: Go proxy setting
       value: direct
     gitea-version:
       env: GITEA_VERSION
       type: string
-      description: The version of Gitea
+      description: Gitea version for the build
       value: '!!!SETME!!!'
-    tags:
-      env: TAGS
+    gitea-work-dir:
+      env: GITEA_WORK_DIR
       type: string
-      description: Build tags
-      value: bindata timetzdata sqlite sqlite_unlock_notify
-    cgo-extra-cflags:
-      env: CGO_EXTRA_CFLAGS
-      type: string
-      description: Extra C flags
-      value: '!!!SETME!!!'
-    user:
-      env: USER
-      type: string
-      description: User used by the application, defaults to 'git'
-      value: git
+      description: Working directory for Gitea
+      value: /data/gitea
     gitea-custom:
       env: GITEA_CUSTOM
       type: string
-      description: Custom configurations for Gitea application
+      description: Custom settings for Gitea
       value: /data/gitea
+    user:
+      env: USER
+      type: string
+      description: User for Gitea
+      value: git
+    run-user:
+      env: RUN_USER
+      type: string
+      description: Running user
+      value: git
+    run-mode:
+      env: RUN_MODE
+      type: string
+      description: Running mode
+      value: prod
+    install-lock:
+      env: INSTALL_LOCK
+      type: bool
+      description: Install lock
+      value: false
+    app-data-path:
+      env: APP_DATA_PATH
+      type: string
+      description: App data directory path
+      value: /data
